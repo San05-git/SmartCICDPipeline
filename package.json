@@ -1,0 +1,22 @@
+{
+  "name": "smart-cicd-pipeline",
+  "version": "1.0.0",
+  "description": "Automated Bug Testing & Deployment System — Enterprise CI/CD Pipeline Demo",
+  "main": "server.js",
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "start": "node server.js",
+    "test": "jest --verbose --forceExit"
+  },
+  "keywords": ["ci-cd", "jenkins", "docker", "testing", "devops"],
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "supertest": "^6.3.3"
+  }
+}
