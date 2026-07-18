@@ -1,9 +1,7 @@
 # Automated Bug Testing & Deployment System
 
-> **Enterprise-Grade CI/CD Pipeline** — Built for HPE Interview Demonstration  
+> **Enterprise-Grade CI/CD Pipeline**  
 > Showcasing automated testing, containerization, security linting, and zero-downtime deployment practices.
-
----
 
 ## Project Overview
 
@@ -17,8 +15,6 @@ This project demonstrates a fully automated **CI/CD pipeline** that:
 
 The result: **bad code never reaches production**, and deployments are consistent, repeatable, and auditable.
 
----
-
 ## Architecture Diagram
 
 ```mermaid
@@ -29,14 +25,12 @@ flowchart LR
     D --> E[Stage 2: Lint & Security Scan]
     E --> F{Stage 3: Automated Bug Testing}
     F -->|Tests Pass| G[Stage 4: Container Artifact Build]
-    F -->|Tests Fail| H[Pipeline Aborted ❌]
+    F -->|Tests Fail| H[Pipeline Aborted]
     G --> I[Stage 5: Mock Deployment & Health Check]
-    I --> J[Deployment Verified ✅]
-```
+    I --> J[Deployment Verified]
 
 ### ASCII Fallback Diagram
 
-```
 +-----------+     +-----------+     +------------------+
 | Developer | --> |  GitHub   | --> | Jenkins Pipeline |
 +-----------+     +-----------+     +------------------+
@@ -69,11 +63,8 @@ flowchart LR
                     +---------+---------+
                               |
                     +---------v---------+
-                    |  DEPLOYED ✅      |
+                    |  DEPLOYED       |
                     +-------------------+
-```
-
----
 
 ## How to Run
 
@@ -124,14 +115,12 @@ A failing test example is included to demonstrate how the pipeline catches bugs.
 ```bash
 docker build -t smart-cicd-pipeline .
 docker run -p 3000:3000 smart-cicd-pipeline
-```
 
 ### 6. Simulate the Full Pipeline (Jenkins)
 
 If you have a Jenkins instance, point it to this repository and use the provided `Jenkinsfile`.  
 The pipeline will execute all 5 stages automatically.
 
----
 
 ## Enterprise Impact
 
@@ -144,11 +133,9 @@ The pipeline will execute all 5 stages automatically.
 | **Slow release cycles** | Full pipeline runs in under 2 minutes, enabling rapid, safe iterations. |
 | **Audit trail** | Every pipeline run is logged in Jenkins with timestamps, test results, and artifact IDs. |
 
----
 
 ## File Structure
 
-```
 SmartCICDPipeline/
 ├── .github/
 │   └── workflows/
@@ -161,19 +148,6 @@ SmartCICDPipeline/
 ├── package.json                 # Node.js project manifest
 ├── server.js                    # Express application (< 50 lines)
 └── README.md                    # This file
-```
 
----
-
-## Interview Talking Points
-
-- **"Why did you choose Jest?"** — Jest is the industry standard for Node.js testing; it's fast, has built-in coverage, and integrates seamlessly with CI tools.
-- **"How does the pipeline prevent bad code from deploying?"** — Stage 3 runs `npm test`. If any test fails, the pipeline calls `error()` which immediately aborts all subsequent stages.
-- **"What about security?"** — Stage 2 runs a mock SonarQube/ESLint scan. In production, you'd replace this with real tools like `npm audit`, SonarQube, or Snyk.
-- **"Why Docker?"** — Containers eliminate "it works on my machine" problems. The same image built in CI is the same image deployed to production.
-- **"How would you scale this?"** — Add parallel stages (e.g., run tests on multiple Node versions), integrate with a container registry (Docker Hub / ECR), and add a canary deployment step.
-- **"Why SQLite?"** — It adds persistence without requiring a separate database server, which keeps the project easy to demo and explain.
-
----
-
-*Built with ❤️ for the HPE interview process.*
+Author
+Sannidhi C S
