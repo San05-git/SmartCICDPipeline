@@ -18,9 +18,10 @@ The result: **bad code never reaches production**, and deployments are consisten
 ## Enterprise Impact
 
 ## Concern  How This Project Addresses It:
-**Manual deployment errors** Every deployment follows the same automated pipeline — no human typos, no forgotten steps. 
-**Bugs reaching production** Automated tests run on every commit. If a test fails, the pipeline aborts before any artifact is built. 
-**Security vulnerabilities** The lint & security scan stage simulates tools like SonarQube and ESLint, catching issues early. 
-**Inconsistent environments** Docker containers guarantee the same runtime environment in dev, CI, and production. 
-**Slow release cycles**  Full pipeline runs in under 2 minutes, enabling rapid, safe iterations. 
-**Audit trail** Every pipeline run is logged in Jenkins with timestamps, test results, and artifact IDs. 
+
+1. **Manual deployment errors** Every deployment follows the same automated pipeline — no human typos, no forgotten steps. 
+2. **Bugs reaching production** Automated tests run on every commit. If a test fails, the pipeline aborts before any artifact is built. 
+3. **Security vulnerabilities** The lint & security scan stage simulates tools like SonarQube and ESLint, catching issues early. 
+4. **Inconsistent environments** Docker containers guarantee the same runtime environment in dev, CI, and production. 
+5. **Slow release cycles**  Full pipeline runs in under 2 minutes, enabling rapid, safe iterations. 
+6. **Audit trail** Every pipeline run is logged in Jenkins with timestamps, test results, and artifact IDs. 
