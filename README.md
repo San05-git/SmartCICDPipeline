@@ -18,25 +18,9 @@ The result: **bad code never reaches production**, and deployments are consisten
 ## Enterprise Impact
 
 ## Concern  How This Project Addresses It 
-**Manual deployment errors** | Every deployment follows the same automated pipeline — no human typos, no forgotten steps. |
-**Bugs reaching production** | Automated tests run on every commit. If a test fails, the pipeline aborts before any artifact is built. |
-**Security vulnerabilities** | The lint & security scan stage simulates tools like SonarQube and ESLint, catching issues early. |
-**Inconsistent environments** | Docker containers guarantee the same runtime environment in dev, CI, and production. |
-**Slow release cycles** | Full pipeline runs in under 2 minutes, enabling rapid, safe iterations. |
-**Audit trail** | Every pipeline run is logged in Jenkins with timestamps, test results, and artifact IDs. |
-
-
-## File Structure
-
-SmartCICDPipeline/
-├── .github/
-│   └── workflows/
-│       └── ci-trigger.yml      # GitHub → Jenkins webhook trigger
-├── tests/
-│   ├── health.test.js           # Health endpoint test
-│   └── validate-user.test.js    # Business logic test (catches bugs)
-├── Dockerfile                   # Lightweight container definition
-├── Jenkinsfile                  # Declarative pipeline (5 stages)
-├── package.json                 # Node.js project manifest
-├── server.js                    # Express application (< 50 lines)
-└── README.md                    # This file
+**Manual deployment errors** Every deployment follows the same automated pipeline — no human typos, no forgotten steps. 
+**Bugs reaching production** Automated tests run on every commit. If a test fails, the pipeline aborts before any artifact is built. 
+**Security vulnerabilities** The lint & security scan stage simulates tools like SonarQube and ESLint, catching issues early. 
+**Inconsistent environments** Docker containers guarantee the same runtime environment in dev, CI, and production. 
+**Slow release cycles**  Full pipeline runs in under 2 minutes, enabling rapid, safe iterations. 
+**Audit trail** Every pipeline run is logged in Jenkins with timestamps, test results, and artifact IDs. 
