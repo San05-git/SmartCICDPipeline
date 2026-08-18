@@ -17,7 +17,7 @@ The result: **bad code never reaches production**, and deployments are consisten
 
 ## Enterprise Impact
 
-## Concern  How This Project Addresses It 
+## Concern  How This Project Addresses It:
 **Manual deployment errors** Every deployment follows the same automated pipeline — no human typos, no forgotten steps. 
 **Bugs reaching production** Automated tests run on every commit. If a test fails, the pipeline aborts before any artifact is built. 
 **Security vulnerabilities** The lint & security scan stage simulates tools like SonarQube and ESLint, catching issues early. 
