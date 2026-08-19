@@ -1,87 +1,55 @@
 # =============================================================================
 # ci-trigger.yml — GitHub Actions Workflow to Trigger Jenkins Pipeline
 # =============================================================================
-# This workflow runs on every push to the main branch. It sends a webhook
-# notification to Jenkins, which then executes the full CI/CD pipeline
-# defined in the Jenkinsfile.
-#
-# In a real enterprise setup, you would:
-#   1. Store the Jenkins URL and API token as GitHub Secrets
-#   2. Use a proper webhook plugin (e.g., "Generic Webhook Trigger" in Jenkins)
-#   3. Add authentication tokens for security
-#
-# The key concept here is "event-driven CI": every code push automatically
-# triggers the pipeline, so no developer has to manually kick off a build.
+# This workflow runs whenever code is pushed to the main branch.
+# It sends a webhook request to Jenkins, which executes the Jenkinsfile.
 # =============================================================================
 
 name: CI Trigger — Notify Jenkins
 
-# ---------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 # TRIGGER
-# ---------------------------------------------------------------------------
-# Run this workflow whenever code is pushed to the main branch.
-# You can also trigger on pull requests by adding: pull_request: [opened, synchronize]
+# -----------------------------------------------------------------------------
 on:
   push:
     branches: [ main ]
 
-# ---------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 # JOBS
-# ---------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 jobs:
-  # -------------------------------------------------------------------------
-  # Job: notify-jenkins
-  # -------------------------------------------------------------------------
-  # Sends an HTTP POST request to the Jenkins server to trigger the pipeline.
-  # The Jenkins job must be configured to accept remote triggers (e.g.,
-  # "Build when a change is pushed to GitHub" or using the Generic Webhook
-  # Trigger plugin).
   notify-jenkins:
-    # Use the latest Ubuntu runner provided by GitHub
+
     runs-on: ubuntu-latest
 
     steps:
-      # ----------------------------------------------------------------------
-      # Step 1: Checkout the repository
-      # ----------------------------------------------------------------------
-      # We need the code to send useful information to Jenkins (e.g., commit
-      # SHA, branch name). In a minimal setup, you could skip checkout and
-      # just send a static trigger.
+
+      # -----------------------------------------------------------------------
+      # Step 1: Checkout repository
+      # -----------------------------------------------------------------------
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # ----------------------------------------------------------------------
-      # Step 2: Send webhook to Jenkins
-      # ----------------------------------------------------------------------
-      # This step uses curl to POST to the Jenkins job URL.
-      #
-      # In production, you would:
-      #   - Use secrets.JENKINS_URL and secrets.JENKINS_TOKEN instead of
-      #     hardcoded values
-      #   - Use a GitHub Action like "jenkins-trigger" for better reliability
-      #
-      # The Jenkins job must have "Trigger builds remotely" enabled with
-      # an authentication token.
+      # -----------------------------------------------------------------------
+      # Step 2: Trigger Jenkins using Generic Webhook Trigger
+      # -----------------------------------------------------------------------
       - name: Trigger Jenkins Pipeline
         env:
-          # In production, store these as GitHub Secrets:
-          #   https://github.com/<user>/<repo>/settings/secrets/actions
-          JENKINS_URL: ${{ secrets.JENKINS_URL || 'http://localhost:8080' }}
-          JENKINS_JOB_NAME: ${{ secrets.JENKINS_JOB_NAME || 'SmartCICDPipeline' }}
-          JENKINS_TOKEN: ${{ secrets.JENKINS_TOKEN || 'your-jenkins-token-here' }}
+          JENKINS_URL: ${{ secrets.JENKINS_URL }}
+          JENKINS_TOKEN: ${{ secrets.JENKINS_TOKEN }}
         run: |
-          echo "Notifying Jenkins at ${JENKINS_URL}/job/${JENKINS_JOB_NAME}/build..."
+          echo "Notifying Jenkins..."
           curl -X POST \
-            "${JENKINS_URL}/job/${JENKINS_JOB_NAME}/build?token=${JENKINS_TOKEN}" \
+            "${JENKINS_URL}/generic-webhook-trigger/invoke?token=${JENKINS_TOKEN}" \
             --fail \
             --silent \
             --show-error
           echo ""
-          echo "✅ Jenkins pipeline triggered successfully."
+          echo "Jenkins pipeline triggered successfully."
 
-      # ----------------------------------------------------------------------
-      # Step 3: Log the trigger event (for audit trail)
-      # ----------------------------------------------------------------------
+      # -----------------------------------------------------------------------
+      # Step 3: Log trigger information
+      # -----------------------------------------------------------------------
       - name: Log trigger event
         run: |
           echo "Pipeline triggered at $(date -u +'%Y-%m-%dT%H:%M:%SZ')"
