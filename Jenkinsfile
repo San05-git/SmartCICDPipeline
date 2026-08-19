@@ -170,7 +170,7 @@ pipeline {
                 bat "docker rm -f ${DOCKER_IMAGE}-test || true"
 
                 // Run the container in detached mode, mapping port 3000.
-                bat "docker run -d --name ${DOCKER_IMAGE}-test -p ${APP_PORT}:${APP_PORT} ${DOCKER_IMAGE}:${DOCKER_TAG}"
+                bat "docker run -d --name ${DOCKER_IMAGE}-test -p 3001:3000 ${DOCKER_IMAGE}:${DOCKER_TAG}"
 
                 // Give the container a moment to start up.
                 bat 'timeout /t 3 /nobreak >nul'
@@ -180,7 +180,7 @@ pipeline {
                 // response with {"status":"healthy",...}.
                 // If the container failed to start, curl will fail and the
                 // pipeline will abort.
-                bat "curl --fail http://localhost:${APP_PORT}/health"
+                bat "curl --fail http://localhost:3001/health"
 
                 echo '✅ Health check passed. Deployment verified.'
 
