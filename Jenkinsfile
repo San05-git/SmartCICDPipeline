@@ -116,13 +116,13 @@ pipeline {
                 echo '========================================'
                 // Install dependencies (in a real pipeline, you'd cache
                 // node_modules to speed this up).
-                sh 'npm install'
+                bat 'npm install'
 
                 // Run the Jest test suite with verbose output.
                 // If any test fails, the 'sh' step returns a non-zero exit
                 // code, which causes Jenkins to mark this stage as FAILED
                 // and abort the pipeline.
-                sh 'npm test'
+                bat 'npm test'
                 echo '✅ All tests passed. No bugs detected.'
             }
         }
@@ -143,7 +143,7 @@ pipeline {
                 echo '========================================'
                 // Build the Docker image using the Dockerfile in the root.
                 // Tag it with the build number for traceability.
-                sh "docker build -t ${DOCKER_IMAGE}:${DOCKER_TAG} ."
+                bat "docker build -t ${DOCKER_IMAGE}:${DOCKER_TAG} ."
                 echo "✅ Docker image built: ${DOCKER_IMAGE}:${DOCKER_TAG}"
             }
         }
@@ -167,25 +167,25 @@ pipeline {
 
                 // Stop and remove any previous container with the same name
                 // (so we don't get port conflicts).
-                sh "docker rm -f ${DOCKER_IMAGE}-test || true"
+                bat "docker rm -f ${DOCKER_IMAGE}-test || true"
 
                 // Run the container in detached mode, mapping port 3000.
-                sh "docker run -d --name ${DOCKER_IMAGE}-test -p ${APP_PORT}:${APP_PORT} ${DOCKER_IMAGE}:${DOCKER_TAG}"
+                bat "docker run -d --name ${DOCKER_IMAGE}-test -p ${APP_PORT}:${APP_PORT} ${DOCKER_IMAGE}:${DOCKER_TAG}"
 
                 // Give the container a moment to start up.
-                sh 'sleep 3'
+                bat 'timeout /t 3 /nobreak >nul'
 
                 // Hit the /health endpoint using curl.
                 // If the container is running correctly, we'll get a 200
                 // response with {"status":"healthy",...}.
                 // If the container failed to start, curl will fail and the
                 // pipeline will abort.
-                sh "curl -f http://localhost:${APP_PORT}/health"
+                bat "curl --fail http://localhost:${APP_PORT}/health"
 
                 echo '✅ Health check passed. Deployment verified.'
 
                 // Clean up the test container.
-                sh "docker rm -f ${DOCKER_IMAGE}-test || true"
+                bat "docker rm -f ${DOCKER_IMAGE}-test || exit /b 0"
             }
         }
     }
@@ -201,7 +201,7 @@ pipeline {
             echo 'Pipeline complete. Cleaning up...'
             echo '========================================'
             // Remove any leftover test containers
-            sh "docker rm -f ${DOCKER_IMAGE}-test || true"
+            bat "docker rm -f ${DOCKER_IMAGE}-test || exit /b 0"
         }
         failure {
             echo '❌ Pipeline FAILED. See logs above for details.'
