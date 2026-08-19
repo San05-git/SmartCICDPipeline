@@ -173,7 +173,7 @@ pipeline {
                 bat "docker run -d --name ${DOCKER_IMAGE}-test -p 3001:3000 ${DOCKER_IMAGE}:${DOCKER_TAG}"
 
                 // Give the container a moment to start up.
-                bat 'timeout /t 3 /nobreak >nul'
+                bat 'powershell -Command "Start-Sleep -Seconds 3"'
 
                 // Hit the /health endpoint using curl.
                 // If the container is running correctly, we'll get a 200
