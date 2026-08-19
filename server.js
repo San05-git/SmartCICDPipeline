@@ -1,29 +1,12 @@
-// =============================================================================
-// server.js — Express Application
-// =============================================================================
-// This is the core application for the Automated Bug Testing & Deployment
-// System. It exposes two endpoints:
-//   1. GET /               — Simple status page
-//   2. GET /health         — Health check for pipeline verification
-//   3. POST /api/validate-user — Business logic that validates user input
-//   4. GET /api/validations — Reads successful validations from SQLite
-//
-// The application is intentionally kept under 50 lines for clarity.
-// =============================================================================
-
 const express = require('express');
 const { appendValidation, readValidations } = require('./storage');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Middleware: parse incoming JSON request bodies
+
 app.use(express.json());
 
-// ---------------------------------------------------------------------------
-// Endpoint 0: Home
-// ---------------------------------------------------------------------------
-// Visiting http://localhost:3000/ now returns a simple status payload instead
-// of Express's default "Cannot GET /" message.
+
 app.get('/', (req, res) => {
   res.json({
     message: 'SmartCICDPipeline is running',
@@ -34,22 +17,12 @@ app.get('/', (req, res) => {
   });
 });
 
-// ---------------------------------------------------------------------------
-// Endpoint 1: Health Check
-// ---------------------------------------------------------------------------
-// Used by the Jenkins pipeline (Stage 5) to verify the container is running.
-// Returns a simple JSON status.
+
 app.get('/health', (req, res) => {
   res.json({ status: 'healthy', timestamp: new Date().toISOString() });
 });
 
-// ---------------------------------------------------------------------------
-// Endpoint 2: Business Logic — Validate User Input
-// ---------------------------------------------------------------------------
-// Accepts a JSON body with { name, email, age }.
-// Validates that all fields are present and of the correct type.
-// If validation fails, returns 400 with a descriptive error message.
-// This is the endpoint our tests use to simulate "catching a bug".
+
 app.post('/api/validate-user', (req, res) => {
   const { name, email, age } = req.body;
 
@@ -77,19 +50,13 @@ app.post('/api/validate-user', (req, res) => {
   res.json({ message: 'User validated successfully', user: { name, email, age } });
 });
 
-// ---------------------------------------------------------------------------
-// Endpoint 3: Stored Validations
-// ---------------------------------------------------------------------------
-// Returns the successful validation records saved on disk. This is a tiny
-// storage demo so the project shows state, not just stateless validation.
+
 app.get('/api/validations', (req, res) => {
   const validations = readValidations();
   res.json({ count: validations.length, validations });
 });
 
-// ---------------------------------------------------------------------------
-// Start the server (only when run directly, not when imported by tests)
-// ---------------------------------------------------------------------------
+
 if (require.main === module) {
   app.listen(PORT, () => {
     console.log(`Server running on http://localhost:${PORT}`);
