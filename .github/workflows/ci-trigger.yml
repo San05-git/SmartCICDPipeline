@@ -1,22 +1,11 @@
-# =============================================================================
-# ci-trigger.yml — GitHub Actions Workflow to Trigger Jenkins Pipeline
-# =============================================================================
-# This workflow runs whenever code is pushed to the main branch.
-# It sends a webhook request to Jenkins, which executes the Jenkinsfile.
-# =============================================================================
-
 name: CI Trigger — Notify Jenkins
 
-# -----------------------------------------------------------------------------
-# TRIGGER
-# -----------------------------------------------------------------------------
+
 on:
   push:
     branches: [ main ]
 
-# -----------------------------------------------------------------------------
-# JOBS
-# -----------------------------------------------------------------------------
+
 jobs:
   notify-jenkins:
 
@@ -24,15 +13,11 @@ jobs:
 
     steps:
 
-      # -----------------------------------------------------------------------
-      # Step 1: Checkout repository
-      # -----------------------------------------------------------------------
+      
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # -----------------------------------------------------------------------
-      # Step 2: Trigger Jenkins using Generic Webhook Trigger
-      # -----------------------------------------------------------------------
+      
       - name: Trigger Jenkins Pipeline
         env:
           JENKINS_URL: ${{ secrets.JENKINS_URL }}
@@ -47,9 +32,7 @@ jobs:
           echo ""
           echo "Jenkins pipeline triggered successfully."
 
-      # -----------------------------------------------------------------------
-      # Step 3: Log trigger information
-      # -----------------------------------------------------------------------
+     
       - name: Log trigger event
         run: |
           echo "Pipeline triggered at $(date -u +'%Y-%m-%dT%H:%M:%SZ')"
