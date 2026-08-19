@@ -25,5 +25,3 @@ The result: **bad code never reaches production**, and deployments are consisten
 4. **Inconsistent environments** Docker containers guarantee the same runtime environment in dev, CI, and production. 
 5. **Slow release cycles**  Full pipeline runs in under 2 minutes, enabling rapid, safe iterations. 
 6. **Audit trail** Every pipeline run is logged in Jenkins with timestamps, test results, and artifact IDs.
-
-CI/CD pipeline test
